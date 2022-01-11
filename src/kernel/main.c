@@ -4,11 +4,11 @@
 #include "../arch/x86_64/interrupt_handlers.h"
 #include "../arch/x86_64/idt.h"
 
-
 void kernel_main()
 {
     InitInterrupts();
     InitIDT();
+
 
     //void CreateHandler(void* handlerFunction, uint8_t entryOffset, uint8_t type_attr, uint8_t sel)
 
@@ -18,6 +18,7 @@ void kernel_main()
 
     int* test = (int*)0x80000000000;
     *test = 2;
+
 
     terminal_set_color(PRINT_COLOR_WHITE, PRINT_COLOR_BLACK);
 

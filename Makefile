@@ -7,16 +7,16 @@ iso := build/321OS-$(arch).iso
 
 linker_script := src/arch/$(arch)/linker.ld
 grub_cfg := src/arch/$(arch)/grub.cfg
-asm_source_files := $(wildcard src/arch/$(arch)/*.asm)
+asm_source_files = $(shell find src/arch/$(arch)/ -type f -name '*.asm')
 asm_object_files := $(patsubst src/arch/$(arch)/%.asm, \
 	build/arch/$(arch)/%.o, $(asm_source_files))
 # Architecture specific C source files
-arch_c_source_files := $(wildcard src/arch/$(arch)/*.c)
+arch_c_source_files = $(shell find src/arch/$(arch)/ -type f -name '*.c')
 arch_c_object_files := $(patsubst src/arch/$(arch)/%.c, \
 	build/arch/$(arch)/%.o, $(arch_c_source_files))
 
 # C source files
-kernel_c_source_files := $(wildcard src/kernel/*.c)
+kernel_c_source_files = $(shell find src/kernel/ -type f -name '*.c')
 kernel_c_object_files := $(patsubst src/kernel/%.c, \
 	build/kernel/%.o, $(kernel_c_source_files))
 
