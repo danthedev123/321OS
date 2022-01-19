@@ -3,27 +3,29 @@
 #include "../arch/x86_64/interrupts.h"
 #include "../arch/x86_64/interrupt_handlers.h"
 #include "../arch/x86_64/idt.h"
+#include "../arch/x86_64/io/io.h"
 
 void kernel_main()
 {
     InitInterrupts();
     InitIDT();
 
-
-    //void CreateHandler(void* handlerFunction, uint8_t entryOffset, uint8_t type_attr, uint8_t sel)
-
-    // Make the page fault exception handler
-
-
-
     terminal_set_color(PRINT_COLOR_WHITE, PRINT_COLOR_BLACK);
 
     terminal_clear();
+
+    RemapPIC();
 
     terminal_printstr("Hello World!\nHello from a new line\n");
 
     InitializeExceptionHandlers();
 
-    int* test = (int*)0x80000000000;
-    *test = 2;
+    outb(PIC1_DATA, 0b11111101);
+    outb(PIC2_DATA, 0b11111111);
+
+    CreateHandler((void*)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x08);
+
+    asm("sti");
+
+    while(1);
 }
