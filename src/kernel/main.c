@@ -26,4 +26,6 @@ void kernel_main()
     CreateHandler((void*)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x08);
 
     asm("sti");
+
+    while(1);
 }
