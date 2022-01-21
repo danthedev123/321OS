@@ -3,19 +3,19 @@
 #include "interrupts.h"
 #include "io/io.h"
 
-void pageFaultHandler()
+__attribute__((interrupt, noreturn)) void pageFaultHandler(struct interrupt_frame* frame)
 {
     terminal_printstr("panic: detected page fault");
     while(1);
 }
 
-void doubleFaultHandler()
+__attribute__((interrupt, noreturn)) void doubleFaultHandler(struct interrupt_frame* frame)
 {
     terminal_printstr("panic: detected double fault");
     while(1);
 }
 
-void gpFaultHandler()
+__attribute__((interrupt, noreturn)) void gpFaultHandler(struct interrupt_frame* frame)
 {
     terminal_printstr("panic: detected general protection fault");
     while(1);
@@ -32,9 +32,24 @@ void InitializeExceptionHandlers()
 
 }
 
-void keyboardInterruptHandler()
+__attribute__((interrupt)) void keyboardInterruptHandler(struct interrupt_frame* frame)
 {
-    terminal_printstr("p");
+    terminal_printstr("pressed");
+
+    uint8_t scancode = inb(0x60);
+
+    PIC_EndMaster();
+}
+
+void PIC_EndMaster()
+{
+    outb(PIC1_COMMAND, PIC_EOI);
+}
+
+void PIC_EndSlave()
+{
+    outb(PIC2_COMMAND, PIC_EOI);
+    outb(PIC1_COMMAND, PIC_EOI);
 }
 
 void RemapPIC()

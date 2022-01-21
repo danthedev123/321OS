@@ -10,11 +10,17 @@
 #define ICW1_ICW4 0x01
 #define ICW4_8086 0x01
 
-void pageFaultHandler();
-void doubleFaultHandler();
-void gpFaultHandler();
-void keyboardInterruptHandler();
+#define PIC_EOI 0x20
+
+struct interrupt_frame;
+
+__attribute__((interrupt, noreturn)) void pageFaultHandler(struct interrupt_frame* frame);
+__attribute__((interrupt, noreturn)) void doubleFaultHandler(struct interrupt_frame* frame);
+__attribute__((interrupt, noreturn)) void gpFaultHandler(struct interrupt_frame* frame);
+__attribute__((interrupt)) void keyboardInterruptHandler(struct interrupt_frame* frame);
 
 void InitializeExceptionHandlers();
 
 void RemapPIC();
+void PIC_EndMaster();
+void PIC_EndSlave();

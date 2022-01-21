@@ -42,6 +42,11 @@ $(iso): $(kernel) $(grub_cfg)
 $(kernel): $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files) $(linker_script)
 	@ld -n -T $(linker_script) -o $(kernel) $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files)
 
+build/arch/$(arch)/interrupt_handlers.o: src/arch/$(arch)/interrupt_handlers.c
+	@printf "CC: $<\n"
+	@mkdir -p $(shell dirname $@)
+	@x86_64-elf-gcc -c -mgeneral-regs-only -mno-red-zone -ffreestanding $< -o $@
+
 build/arch/$(arch)/%.o: src/arch/$(arch)/%.asm
 	@printf "AS: $<\n"
 	@mkdir -p $(shell dirname $@)
