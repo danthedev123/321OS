@@ -4,9 +4,16 @@
 #include "../arch/x86_64/interrupt_handlers.h"
 #include "../arch/x86_64/idt.h"
 #include "../arch/x86_64/io/io.h"
+#include "../arch/x86_64/gdt.h"
 
 void kernel_main()
 {
+    struct GDTDescriptor gdtDescriptor;
+
+    gdtDescriptor.Size = sizeof(struct GDT) - 1;
+    gdtDescriptor.Offset = (uint64_t)&DefaultGDT;
+    LoadGDT(&gdtDescriptor);
+
     InitInterrupts();
     InitIDT();
 

@@ -9,7 +9,7 @@ linker_script := src/arch/$(arch)/linker.ld
 grub_cfg := src/arch/$(arch)/grub.cfg
 asm_source_files = $(shell find src/arch/$(arch)/ -type f -name '*.asm')
 asm_object_files := $(patsubst src/arch/$(arch)/%.asm, \
-	build/arch/$(arch)/%.o, $(asm_source_files))
+	build/arch/$(arch)/%_asm.o, $(asm_source_files))
 # Architecture specific C source files
 arch_c_source_files = $(shell find src/arch/$(arch)/ -type f -name '*.c')
 arch_c_object_files := $(patsubst src/arch/$(arch)/%.c, \
@@ -47,7 +47,7 @@ build/arch/$(arch)/interrupt_handlers.o: src/arch/$(arch)/interrupt_handlers.c
 	@mkdir -p $(shell dirname $@)
 	@x86_64-elf-gcc -c -mgeneral-regs-only -mno-red-zone -ffreestanding $< -o $@
 
-build/arch/$(arch)/%.o: src/arch/$(arch)/%.asm
+build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 	@printf "AS: $<\n"
 	@mkdir -p $(shell dirname $@)
 	@nasm -felf64 $< -o $@
