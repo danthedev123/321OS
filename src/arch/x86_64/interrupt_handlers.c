@@ -85,5 +85,5 @@ void RemapPIC()
     io_wait();
     outb(PIC2_DATA, a2);
 
-    terminal_printstr("\nSUCCESS: PIC Initialized successfully");
+    terminal_printstr("SUCCESS: PIC Initialized successfully\n");
 }

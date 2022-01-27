@@ -57,7 +57,7 @@ void terminal_newline()
         }
     }
 
-    clear_row(VGA_NUM_COLS - 1);
+    clear_row(VGA_NUM_ROWS - 1);
 }
 
 void terminal_putchar(char character)
