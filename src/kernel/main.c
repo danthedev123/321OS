@@ -5,9 +5,14 @@
 #include "../arch/x86_64/idt.h"
 #include "../arch/x86_64/io/io.h"
 #include "../arch/x86_64/gdt.h"
+#include "../arch/x86_64/memory/memory.h"
+#include "../arch/x86_64/memory/Bitmap.h"
+#include "../arch/x86_64/memory/paging/PageFrameAllocator.h"
 #include "multiboot.h"
 
 #include "format.h"
+
+uint8_t testBuffer[20];
 
 void kernel_main(unsigned long addr)
 {
@@ -51,6 +56,8 @@ void kernel_main(unsigned long addr)
 
     struct multiboot_tag* tag;
 
+    static uint64_t memSize = 0;
+
 
     for (tag = (struct multiboot_tag *) (addr + 8);
        tag->type != MULTIBOOT_TAG_TYPE_END;
@@ -64,26 +71,42 @@ void kernel_main(unsigned long addr)
         switch (tag->type)
         {
             case MULTIBOOT_TAG_TYPE_MMAP:
-                multiboot_memory_map_t* mmap;
-
                 terminal_printstr("Successfully located memory map tag\n");
 
-                terminal_printstr("Memory map: \n");
+                uint64_t memorySize = GetTotalMemSize(tag); // bytes
 
-                for (mmap = ((struct multiboot_tag_mmap *) tag)->entries;
-                 (multiboot_uint8_t *) mmap 
-                   < (multiboot_uint8_t *) tag + tag->size;
-                 mmap = (multiboot_memory_map_t *) 
-                   ((unsigned long) mmap
-                    + ((struct multiboot_tag_mmap *) tag)->entry_size))
+                terminal_printstr("Total mem size: ");
+
+                terminal_printstr(uint64ToString(memorySize));
+
+                terminal_printstr(" bytes\n");
+
+                multiboot_memory_map_t* mmap;
+
+
+                for (mmap = ((struct multiboot_tag_mmap *)tag)->entries;
+                    (multiboot_uint8_t *)mmap < (multiboot_uint8_t *)tag + tag->size;
+                    mmap = (multiboot_memory_map_t *)((unsigned long)mmap + ((struct multiboot_tag_mmap *)tag)->entry_size))
+                {
+                    terminal_printstr("section ");
+                    terminal_printstr("Base Addr: ");
+                    terminal_printstr(hexToString(mmap->addr));
+                    terminal_printstr(" ");
+                    terminal_printstr("Length: ");
+                    terminal_printstr(hexToString(mmap->len));
+                    terminal_printstr(" ");
+                    terminal_printstr("Type: ");
+                    if (mmap->type == 1)
                     {
-                        terminal_printstr("length = \n");
-                        terminal_printstr(hexToString((uint64_t)(mmap->len >> 32)));
-                        terminal_printstr("\n");
-                        terminal_printstr(hexToString((uint64_t)(mmap->len & 0xffffffff)));
-                        terminal_printstr("\n");
+                        terminal_printstr("Available");
                     }
-
+                    else
+                    {
+                        terminal_printstr("Not available");
+                    }
+                    terminal_printstr("\n");
+                }
+                ParseMultibootMemMap(tag);
                 break;
             case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
                 struct multiboot_tag_basic_meminfo* t;
@@ -100,10 +123,8 @@ void kernel_main(unsigned long addr)
                 terminal_printstr(hexToString((uint64_t)t->mem_upper));
 
                 terminal_printstr("\n");
-                
         }
     }
-
 
     while(1);
 }

@@ -1,13 +1,15 @@
 #pragma once
-#include "../../../kernel/bool.h"
+#include <bool.h>
 #include <stdint.h>
 #include <stddef.h>
 
 struct Bitmap
 {
-    size_t size;
     uint8_t* buffer;
+    size_t size;
 };
 
-bool Get(struct Bitmap* bitmap, uint64_t index);
-bool Set(struct Bitmap* bitmap, uint64_t index, bool value);
+void bitmap_init(struct Bitmap* bitmap, void* buffer, size_t size);
+
+bool bitmap_get(struct Bitmap* bitmap, size_t index);
+void bitmap_set(struct Bitmap* bitmap, size_t index, bool value);

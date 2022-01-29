@@ -1,35 +1,37 @@
 #include "Bitmap.h"
+#include "memory.h"
 
-bool Get(struct Bitmap* bitmap, uint64_t index)
+void bitmap_init(struct Bitmap* bitmap, void* buffer, size_t size)
 {
-    if (index > bitmap->size * 8) return 0;
+    bitmap->buffer = buffer;
+    bitmap->size = size;
 
-    uint64_t byteIndex = index / 8;
-    uint8_t bitIndex = index % 8;
-    uint8_t bitIndexer = 0b10000000 >> bitIndex;
+    memset(bitmap->buffer, 0, size);
+}
 
-    if ((bitmap->buffer[byteIndex] & bitIndexer) > 0)
+bool bitmap_get(struct Bitmap* bitmap, size_t index)
+{
+    uint64_t byte_index = index / 8;
+    uint8_t bit_index = index % 8;
+    uint8_t bit_indexer = 0b10000000 >> bit_index;
+
+    if ((bitmap->buffer[byte_index] & bit_indexer) > 0)
     {
         return 1;
     }
-
     return 0;
 }
 
-bool Set(struct Bitmap* bitmap, uint64_t index, bool value)
+void bitmap_set(struct Bitmap* bitmap, size_t index, bool value)
 {
-    if (index > bitmap->size * 8) return 0;
+    uint64_t byte_index = index / 8;
+    uint8_t bit_index = index % 8;
+    uint8_t bit_indexer = 0b10000000 >> bit_index;
 
-    uint64_t byteIndex = index / 8;
-    uint8_t bitIndex = index % 8;
-    uint8_t bitIndexer = 0b10000000 >> bitIndex;
-
-    bitmap->buffer[byteIndex] &= ~bitIndexer;
+    bitmap->buffer[byte_index] &= ~bit_indexer;
 
     if (value)
     {
-        bitmap->buffer[byteIndex] |= bitIndexer;
+        bitmap->buffer[byte_index] |= bit_indexer;
     }
-
-    return 1;
 }

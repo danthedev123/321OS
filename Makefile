@@ -28,7 +28,7 @@ clean:
 	@rm -r build
 
 run: $(iso)
-	@qemu-system-x86_64 -cdrom $(iso) -m 1G
+	@qemu-system-x86_64 -cdrom $(iso) -m 2G
 
 iso: $(iso)
 
@@ -45,7 +45,7 @@ $(kernel): $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files) $
 build/arch/$(arch)/interrupt_handlers.o: src/arch/$(arch)/interrupt_handlers.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@x86_64-elf-gcc -c -mgeneral-regs-only -mno-red-zone -ffreestanding $< -o $@
+	@x86_64-elf-gcc -I src/include/ -c -mgeneral-regs-only -mno-red-zone -ffreestanding $< -o $@ -g
 
 build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 	@printf "AS: $<\n"
@@ -56,9 +56,9 @@ build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 build/arch/$(arch)/%.o: src/arch/$(arch)/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@x86_64-elf-gcc -c -ffreestanding $< -o $@
+	@x86_64-elf-gcc -I src/include/ -c -ffreestanding $< -o $@ -g
 
 build/kernel/%.o: src/kernel/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@x86_64-elf-gcc -c -ffreestanding $< -o $@
+	@x86_64-elf-gcc -I src/include/ -c -ffreestanding $< -o $@ -g
