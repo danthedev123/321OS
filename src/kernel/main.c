@@ -106,7 +106,7 @@ void kernel_main(unsigned long addr)
                     }
                     terminal_printstr("\n");
                 }
-                ParseMultibootMemMap(tag);
+                InitializePageFrameAllocator(tag);
                 break;
             case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
                 struct multiboot_tag_basic_meminfo* t;

@@ -5,8 +5,6 @@ void bitmap_init(struct Bitmap* bitmap, void* buffer, size_t size)
 {
     bitmap->buffer = buffer;
     bitmap->size = size;
-
-    memset(bitmap->buffer, 0, size);
 }
 
 bool bitmap_get(struct Bitmap* bitmap, size_t index)
