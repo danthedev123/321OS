@@ -1,23 +1,29 @@
-ENTRY(start)
+ENTRY(kernel_main)
 
 SECTIONS { 
-    . = 1M;
+    . = 0xffffffff80200000;
 
-    .boot :
-    {
-        KEEP(*(.multiboot_header))
+    /* We place the .stivalehdr section containing the header in its own section, */
+    /* and we use the KEEP directive on it to make sure it doesn't get discarded. */
+    .stivalehdr : {
+        KEEP(*(.stivalehdr))
     }
-
-    .text :
-    {
-        *(.text .text.*)
+ 
+    /* Then let's place all the other traditional executable sections afterwards. */
+    .text : {
+        *(.text*)
     }
-
+ 
     .rodata : {
-        *(.rodata .rodata.*)
+        *(.rodata*)
     }
-
-    .data.rel.ro : {
-        *(.data.rel.ro.local*) *(.data.rel.ro .data.rel.ro.*)
+ 
+    .data : {
+        *(.data*)
+    }
+ 
+    .bss : {
+        *(COMMON)
+        *(.bss*)
     }
 }

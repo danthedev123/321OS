@@ -1,5 +1,5 @@
 #pragma once
-#include "stdint.h"
+#include <stdint.h>
 
 struct GDTDescriptor
 {
@@ -20,11 +20,15 @@ struct GDTEntry
 struct GDT
 {
     struct GDTEntry null;
-    struct GDTEntry kernelCode;
-    struct GDTEntry kernelData;
-    struct GDTEntry userNull;
-    struct GDTEntry userCode;
-    struct GDTEntry userData;
+    struct GDTEntry _16bitCode;
+    struct GDTEntry _16bitData;
+    struct GDTEntry _32bitCode;
+    struct GDTEntry _32bitData;
+    struct GDTEntry _64bitCode;
+    struct GDTEntry _64bitData;
+    struct GDTEntry UserData;
+    struct GDTEntry UserCode;
+    struct GDTEntry reserved;
 }__attribute__((packed))
 __attribute__((aligned(0x1000)));
 

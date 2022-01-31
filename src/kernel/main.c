@@ -1,37 +1,72 @@
 
-#include "terminal.h"
+//#include "terminal.h"
 #include "../arch/x86_64/interrupts.h"
 #include "../arch/x86_64/interrupt_handlers.h"
 #include "../arch/x86_64/idt.h"
 #include "../arch/x86_64/io/io.h"
 #include "../arch/x86_64/gdt.h"
-#include "../arch/x86_64/memory/memory.h"
+//#include "../arch/x86_64/memory/memory.h"
 #include "../arch/x86_64/memory/Bitmap.h"
-#include "../arch/x86_64/memory/paging/PageFrameAllocator.h"
-#include "multiboot.h"
+//#include "../arch/x86_64/memory/paging/PageFrameAllocator.h"
+#include "stivale2.h"
 
 #include "format.h"
 
-uint8_t testBuffer[20];
+static uint8_t stack[8192];
+
+static struct stivale2_header_tag_terminal terminal_hdr_tag =
+{
+    // stivale2 tags begin with an identifier and a pointer to the next tag in the linked list
+    .tag =
+    {
+        // identifier constant defined in stivale2.h
+        .identifier = STIVALE2_HEADER_TAG_TERMINAL_ID,
+        // next = 0 (end of linked list of header tags)
+        .next = 0
+    },
+
+    .flags = 0,
+};
+
+static struct stivale2_header_tag_framebuffer framebuffer_hdr_tag =
+{
+    .tag =
+    {
+        .identifier = STIVALE2_HEADER_TAG_FRAMEBUFFER_ID,
+        .next = (uint64_t)&terminal_hdr_tag
+    },
+    .framebuffer_width = 0,
+    .framebuffer_height = 0,
+    .framebuffer_bpp = 0,
+};
+
+__attribute__((section(".stivale2hdr"), used))
+static struct stivale2_header stivale_hdr =
+{
+    .entry_point = 0,
+    .stack = (uintptr_t)stack + sizeof(stack),
+    .flags = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4),
+    // Beginning of linked list
+    .tags = (uintptr_t)&framebuffer_hdr_tag
+};
 
 void kernel_main(unsigned long addr)
 {
-    struct GDTDescriptor gdtDescriptor;
+    // struct GDTDescriptor gdtDescriptor;
 
-    gdtDescriptor.Size = sizeof(struct GDT) - 1;
-    gdtDescriptor.Offset = (uint64_t)&DefaultGDT;
-    LoadGDT(&gdtDescriptor);
+    // gdtDescriptor.Size = sizeof(struct GDT) - 1;
+    // gdtDescriptor.Offset = (uint64_t)&DefaultGDT;
+    // LoadGDT(&gdtDescriptor);
 
     InitInterrupts();
     InitIDT();
 
-    terminal_set_color(PRINT_COLOR_WHITE, PRINT_COLOR_BLACK);
+    //terminal_set_color(PRINT_COLOR_WHITE, PRINT_COLOR_BLACK);
 
-    terminal_clear();
 
     RemapPIC();
 
-    terminal_printstr("Hello World!\nHello from a new line\n");
+    //terminal_printstr("Hello World!\nHello from a new line\n");
 
     InitializeExceptionHandlers();
 
@@ -41,90 +76,6 @@ void kernel_main(unsigned long addr)
     CreateHandler((void*)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x08);
 
     asm("sti");
-
-    unsigned int size;
-
-    size = *(unsigned int*)addr;
-
-    terminal_printstr("\n");
-
-    terminal_printstr("MBI size: 0x");
-
-    terminal_printstr(hexToString((uint64_t)size));
-
-    terminal_printstr("\n");
-
-    struct multiboot_tag* tag;
-
-    static uint64_t memSize = 0;
-
-
-    for (tag = (struct multiboot_tag *) (addr + 8);
-       tag->type != MULTIBOOT_TAG_TYPE_END;
-       tag = (struct multiboot_tag *) ((multiboot_uint8_t *) tag 
-                                       + ((tag->size + 7) & ~7)))
-    {
-        terminal_printstr("Detected tag of type: ");
-        terminal_printstr(hexToString((uint64_t)tag->type));
-        terminal_printstr("\n");
-
-        switch (tag->type)
-        {
-            case MULTIBOOT_TAG_TYPE_MMAP:
-                terminal_printstr("Successfully located memory map tag\n");
-
-                uint64_t memorySize = GetTotalMemSize(tag); // bytes
-
-                terminal_printstr("Total mem size: ");
-
-                terminal_printstr(uint64ToString(memorySize));
-
-                terminal_printstr(" bytes\n");
-
-                multiboot_memory_map_t* mmap;
-
-
-                for (mmap = ((struct multiboot_tag_mmap *)tag)->entries;
-                    (multiboot_uint8_t *)mmap < (multiboot_uint8_t *)tag + tag->size;
-                    mmap = (multiboot_memory_map_t *)((unsigned long)mmap + ((struct multiboot_tag_mmap *)tag)->entry_size))
-                {
-                    terminal_printstr("section ");
-                    terminal_printstr("Base Addr: ");
-                    terminal_printstr(hexToString(mmap->addr));
-                    terminal_printstr(" ");
-                    terminal_printstr("Length: ");
-                    terminal_printstr(hexToString(mmap->len));
-                    terminal_printstr(" ");
-                    terminal_printstr("Type: ");
-                    if (mmap->type == 1)
-                    {
-                        terminal_printstr("Available");
-                    }
-                    else
-                    {
-                        terminal_printstr("Not available");
-                    }
-                    terminal_printstr("\n");
-                }
-                InitializePageFrameAllocator(tag);
-                break;
-            case MULTIBOOT_TAG_TYPE_BASIC_MEMINFO:
-                struct multiboot_tag_basic_meminfo* t;
-
-                terminal_printstr("Found basic mem info\n");
-                terminal_printstr("Mem lower: ");
-
-                terminal_printstr(hexToString((uint64_t)t->mem_lower));
-
-                terminal_printstr("\n");
-
-                terminal_printstr("Mem upper: ");
-
-                terminal_printstr(hexToString((uint64_t)t->mem_upper));
-
-                terminal_printstr("\n");
-        }
-    }
 
     while(1);
 }
