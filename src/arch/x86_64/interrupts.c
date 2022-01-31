@@ -17,7 +17,7 @@ void CreateHandler(void* handlerFunction, uint8_t entryOffset, uint8_t type_attr
 
     newInterrupt->offset0 = (uint16_t)((uint64_t)handlerFunction & 0x000000000000ffff);
     newInterrupt->offset1 = (uint16_t)(((uint64_t)handlerFunction & 0x00000000ffff0000) >> 16);
-    newInterrupt->offset2 = (uint16_t)(((uint64_t)handlerFunction & 0xffffffff00000000) >> 32);
+    newInterrupt->offset2 = (uint32_t)(((uint64_t)handlerFunction & 0xffffffff00000000) >> 32);
     newInterrupt->type_attr = type_attr;
     newInterrupt->sel = sel;
     newInterrupt->ignore = 0;

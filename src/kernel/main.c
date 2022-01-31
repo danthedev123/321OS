@@ -9,6 +9,8 @@
 #include "../arch/x86_64/memory/Bitmap.h"
 //#include "../arch/x86_64/memory/paging/PageFrameAllocator.h"
 #include "stivale2.h"
+#include "stivale/stivale_tags.h"
+#include "stivale/terminal.h"
 
 #include "format.h"
 
@@ -50,13 +52,18 @@ static struct stivale2_header stivale_hdr =
     .tags = (uintptr_t)&framebuffer_hdr_tag
 };
 
-void kernel_main(unsigned long addr)
+void kernel_main(struct stivale2_struct* stivale2_struct)
 {
     // struct GDTDescriptor gdtDescriptor;
 
     // gdtDescriptor.Size = sizeof(struct GDT) - 1;
     // gdtDescriptor.Offset = (uint64_t)&DefaultGDT;
     // LoadGDT(&gdtDescriptor);
+
+    // Initialize tags struct
+    GetTagsStructure(stivale2_struct);
+
+    terminal_initialize();
 
     InitInterrupts();
     InitIDT();
@@ -73,9 +80,10 @@ void kernel_main(unsigned long addr)
     outb(PIC1_DATA, 0b11111101);
     outb(PIC2_DATA, 0b11111111);
 
-    CreateHandler((void*)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x08);
+    CreateHandler((void*)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x28);
 
     asm("sti");
 
+    terminal_printstr("Hello World");
     while(1);
 }

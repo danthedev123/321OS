@@ -24,9 +24,9 @@ __attribute__((interrupt, noreturn)) void gpFaultHandler(struct interrupt_frame*
 
 void InitializeExceptionHandlers()
 {
-    CreateHandler((void*)pageFaultHandler, 0xE, IDT_TA_TrapGate, 0x08);
-    CreateHandler((void*)doubleFaultHandler, 0x8, IDT_TA_TrapGate, 0x08);
-    CreateHandler((void*)gpFaultHandler, 0xD, IDT_TA_TrapGate, 0x08);
+    CreateHandler((void*)pageFaultHandler, 0xE, IDT_TA_TrapGate, 0x28);
+    CreateHandler((void*)doubleFaultHandler, 0x8, IDT_TA_TrapGate, 0x28);
+    CreateHandler((void*)gpFaultHandler, 0xD, IDT_TA_TrapGate, 0x28);
 
 }
 
