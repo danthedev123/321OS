@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#define SCALE sizeof(size_t)
+
 struct Bitmap
 {
     uint8_t* buffer;

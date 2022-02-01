@@ -11,6 +11,7 @@
 #include "stivale2.h"
 #include "stivale/stivale_tags.h"
 #include "stivale/terminal.h"
+#include "../arch/x86_64/memory/paging/PageFrameAllocator.h"
 
 #include "format.h"
 
@@ -54,16 +55,17 @@ static struct stivale2_header stivale_hdr =
 
 void kernel_main(struct stivale2_struct* stivale2_struct)
 {
-    // struct GDTDescriptor gdtDescriptor;
+    struct GDTDescriptor gdtDescriptor;
 
-    // gdtDescriptor.Size = sizeof(struct GDT) - 1;
-    // gdtDescriptor.Offset = (uint64_t)&DefaultGDT;
-    // LoadGDT(&gdtDescriptor);
+    gdtDescriptor.Size = sizeof(struct GDT) - 1;
+    gdtDescriptor.Offset = (uint64_t)&DefaultGDT;
+    LoadGDT(&gdtDescriptor);
 
-    // Initialize tags struct
-    GetTagsStructure(stivale2_struct);
+    // Initialize tags struct, terminal and memory map
+    stivale_init(stivale2_struct);
 
-    terminal_initialize();
+    InitializePageFrameAllocator();
+
 
     InitInterrupts();
     InitIDT();

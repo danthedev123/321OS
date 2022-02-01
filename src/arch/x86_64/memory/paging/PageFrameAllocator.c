@@ -1,51 +1,34 @@
-// #include "PageFrameAllocator.h"
-// #include <stdint.h>
-// #include <bool.h>
-// #include <stddef.h>
-// #include "../Bitmap.h"
-// #include "../memory.h"
-// #include "../../../../kernel/terminal.h"
-// #include "../../../../kernel/format.h"
+#include "PageFrameAllocator.h"
 
-// uint64_t freeMemory;
-// uint64_t reservedMemory;
-// uint64_t usedMemory;
+// Total memory size in the system stored in bytes
+static size_t total_mem_size = 0;
+// Amount of memory in bytes that has been used
+static size_t used_mem_size = 0;
+// Amount of memory in bytes that is reserved
+static size_t reserved_mem_size = 0;
+// Bitmap of memory space
+// 1 = in use
+// 0 = free
+static struct Bitmap pageframebitmap;
 
-// struct Bitmap bitmap; // page frame allocator bitmap
+void InitializePageFrameAllocator()
+{
+    struct MemoryMap* memorymap = GetTags()->mmap;
+    size_t total_entries = memorymap->total_entries_num;
+    struct mmapEntry* largest_entry = NULL;
 
-// bool Initialized = false;
+    // Find the largest memory region
+    for (size_t i = 0; i < total_entries; i++)
+    {
+        struct mmapEntry* memorymap_entry = memorymap->entries + i;
 
-// void InitializePageFrameAllocator(struct multiboot_tag* tag)
-// {
-//     if (Initialized) return;
+        if (memorymap_entry->type == MEM_TYPE_UNUSABLE && (largest_entry == NULL || memorymap_entry->num_pages > largest_entry->num_pages))
+        {
+            largest_entry = memorymap_entry;
+        }
 
-//     Initialized = true;
+        total_mem_size += memorymap_entry->num_pages * 4096;
+    }
 
-//     multiboot_memory_map_t* mmap;
-
-//     void* largestFreeMemSeg = NULL;
-//     size_t largestFreeMemSegSize = 0;
-
-//     struct multiboot_tag_mmap* mmap_tag = (struct multiboot_tag_mmap*)tag;
-
-//     for (mmap = ((struct multiboot_tag_mmap *)mmap_tag)->entries;
-//          (multiboot_uint8_t *)mmap < (multiboot_uint8_t *)mmap_tag + mmap_tag->size;
-//          mmap = (multiboot_memory_map_t *)((unsigned long)mmap + ((struct multiboot_tag_mmap *)mmap_tag)->entry_size))
-//     {
-
-//         largestFreeMemSeg = (void*)mmap->addr;
-
-
-//         largestFreeMemSegSize = mmap->len;
-//     }
-//     uint64_t memSize = GetTotalMemSize(tag);
-
-//     uint64_t bitmapSize = memSize / 4096 / 8 + 1;
-
-//     bitmap_init(&bitmap, largestFreeMemSeg, largestFreeMemSegSize);
-
-//     for (int i = 0; i < bitmapSize; i++)
-//     {
-//         *(uint8_t*)(bitmap.buffer + i) = 0;
-//     }
-// }
+    bitmap_init(&pageframebitmap, largest_entry->address, total_mem_size / 4096 / SCALE);
+}

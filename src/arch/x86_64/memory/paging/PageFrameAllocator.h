@@ -1,6 +1,7 @@
-// #pragma once
-// #include "../../../../kernel/multiboot.h"
+#pragma once
+#include "../memory.h"
+#include "../../../../kernel/stivale/stivale_tags.h"
+#include "../Bitmap.h"
 
-// /* page frame allocator */
-
-// void InitializePageFrameAllocator(struct multiboot_tag* mmap_tag);
+// Intializes the page frame allocator
+void InitializePageFrameAllocator();
