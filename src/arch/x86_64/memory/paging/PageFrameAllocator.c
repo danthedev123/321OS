@@ -1,5 +1,6 @@
 #include "PageFrameAllocator.h"
 #include "../../../../kernel/stivale/terminal.h"
+#include "../../../../kernel/format.h"
 
 // Total memory size in the system stored in bytes
 static size_t total_mem_size = 0;
@@ -16,6 +17,7 @@ static size_t current_index = 0;
 
 void InitializePageFrameAllocator()
 {
+
     struct MemoryMap* memorymap = GetTags()->mmap;
     size_t total_entries = memorymap->total_entries_num;
     struct mmapEntry* largest_entry = NULL;
@@ -50,6 +52,10 @@ void InitializePageFrameAllocator()
 
         pageframe_unreserve(mmap_entry->address, reserved_size / 4096);
     }
+
+    terminal_printstr("Total RAM: ");
+    terminal_printstr(uint64ToString((uint64_t)total_mem_size));
+    terminal_printstr("\n");
 }
 
 bool pageframe_edit(uint64_t index, bool state)

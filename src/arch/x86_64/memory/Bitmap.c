@@ -40,11 +40,11 @@ bool bitmap_set(struct Bitmap* bitmap, size_t index, bool value)
 
 	if (value)
     {
-		bitmap->buffer[byte_index] |= bit_selector;		// force the bit on
+		bitmap->buffer[byte_index] |= bit_selector; // force the bit on
 	}
     else
     {
-		bitmap->buffer[byte_index] &= ~bit_selector;	// force the bit off
+		bitmap->buffer[byte_index] &= ~bit_selector; // force the bit off
 	}
 
     return true;

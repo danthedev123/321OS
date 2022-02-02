@@ -28,7 +28,7 @@ clean:
 	@rm -r build
 
 run: $(iso)
-	@qemu-system-x86_64 -cdrom $(iso) -m 1G
+	@qemu-system-x86_64 -cdrom $(iso) -m 2G -machine type=q35
 
 iso: $(iso)
 

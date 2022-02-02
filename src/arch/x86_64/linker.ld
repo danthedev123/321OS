@@ -1,7 +1,8 @@
 ENTRY(kernel_main)
 
 SECTIONS { 
-    . = 0xffffffff80200000;
+    . = 0xffffffff80000000;
+    _KernelStart = .;
 
     /* We place the .stivalehdr section containing the header in its own section, */
     /* and we use the KEEP directive on it to make sure it doesn't get discarded. */
