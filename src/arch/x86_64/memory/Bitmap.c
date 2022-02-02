@@ -9,6 +9,11 @@ void bitmap_init(struct Bitmap* bitmap, void* buffer, size_t size)
     memset(bitmap->buffer, 0, size);
 }
 
+size_t bitmap_size(struct Bitmap* bitmap)
+{
+    return bitmap->size * SCALE;
+}
+
 bool bitmap_get(struct Bitmap* bitmap, size_t index)
 {
     uint64_t byte_index = index / SCALE;
@@ -22,8 +27,12 @@ bool bitmap_get(struct Bitmap* bitmap, size_t index)
     return false;
 }
 
-void bitmap_set(struct Bitmap* bitmap, size_t index, bool value)
+bool bitmap_set(struct Bitmap* bitmap, size_t index, bool value)
 {
+    if (index > bitmap_size(bitmap))
+    {
+        return false; // out of range
+    }
 
 	uint64_t byte_index = index / SCALE;
 	uint8_t bit_index = index % SCALE;
@@ -37,4 +46,6 @@ void bitmap_set(struct Bitmap* bitmap, size_t index, bool value)
     {
 		bitmap->buffer[byte_index] &= ~bit_selector;	// force the bit off
 	}
+
+    return true;
 }
