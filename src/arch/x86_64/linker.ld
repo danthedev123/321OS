@@ -1,7 +1,10 @@
 ENTRY(kernel_main)
 
 SECTIONS { 
-    . = 0xffffffff80000000;
+    _KernelBase = 0xffffffff80000000;
+
+    . = _KernelBase + 2M;
+
     _KernelStart = .;
 
     /* We place the .stivalehdr section containing the header in its own section, */
@@ -27,4 +30,6 @@ SECTIONS {
         *(COMMON)
         *(.bss*)
     }
+
+    _KernelEnd = .;
 }

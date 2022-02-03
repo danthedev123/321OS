@@ -37,6 +37,7 @@ void InitializePageFrameAllocator()
 
     bitmap_init(&pageframebitmap, largest_entry->address, total_mem_size / 4096 / SCALE);
 
+
     pageframe_reserve(0, total_mem_size / 4096);
 
     for (size_t i = 0; i < total_entries; i++)
@@ -53,9 +54,14 @@ void InitializePageFrameAllocator()
         pageframe_unreserve(mmap_entry->address, reserved_size / 4096);
     }
 
-    terminal_printstr("Total RAM: ");
-    terminal_printstr(uint64ToString((uint64_t)total_mem_size));
-    terminal_printstr("\n");
+    size_t pageFrameBitmapPages = NEAREST_PAGE(pageframebitmap.size);
+    pageframe_lock(pageframebitmap.buffer, pageFrameBitmapPages);
+
+    size_t kernelSize = (size_t)&_KernelEnd - (size_t)&_KernelStart;
+    size_t kernelPages = NEAREST_PAGE(kernelSize);
+    pageframe_lock(KERNEL_PHYSICAL_ADDR(&_KernelStart), kernelPages);
+
+    pageframe_reserve(0, 256);
 }
 
 bool pageframe_edit(uint64_t index, bool state)
@@ -135,6 +141,32 @@ void pageframe_unreserve(void* physicalAddress, size_t pages)
             }
         }
     }
+}
+
+void* pageframe_allocate()
+{
+    size_t size = bitmap_size(&pageframebitmap);
+
+    for (; current_index < size; current_index++)
+    {
+        if (bitmap_get(&pageframebitmap, current_index))
+        {
+            continue; // In use
+        }
+
+        void* requestedPage = (void*)(current_index * 4096);
+        current_index++;
+
+        pageframe_lock(requestedPage, 1);
+
+        return requestedPage;
+    }
+
+    // At some point, in the future when we have disk support
+    // and a filesystem we can create a "page file"
+    // on the disk that we can use as swap
+
+    return NULL;
 }
 
 size_t get_total_memory_size()

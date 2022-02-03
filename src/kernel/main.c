@@ -86,6 +86,5 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
 
     asm("sti");
 
-    terminal_printstr("Hello World");
     while(1);
 }

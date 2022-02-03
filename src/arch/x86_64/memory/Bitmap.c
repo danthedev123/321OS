@@ -16,6 +16,11 @@ size_t bitmap_size(struct Bitmap* bitmap)
 
 bool bitmap_get(struct Bitmap* bitmap, size_t index)
 {
+    if (index > bitmap_size(bitmap))
+    {
+        return false;
+    }
+    
     uint64_t byte_index = index / SCALE;
     uint8_t bit_index = index % SCALE;
     uint8_t bit_indexer = 0b10000000 >> bit_index;
