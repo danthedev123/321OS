@@ -64,7 +64,7 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
     // Initialize tags struct, terminal and memory map
     stivale_init(stivale2_struct);
 
-    InitializePageFrameAllocator();
+    //InitializePageFrameAllocator();
 
 
     InitInterrupts();
