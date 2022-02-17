@@ -11,7 +11,6 @@
 #include "stivale2.h"
 #include "stivale/stivale_tags.h"
 #include "stivale/terminal.h"
-#include "../arch/x86_64/memory/paging/PageFrameAllocator.h"
 
 #include "format.h"
 

@@ -1,3 +1,7 @@
+# NOTE: DO NOT USE!
+# This version of debian has outdated nasm
+# that does not support retfq instruction
+
 FROM randomdude/gcc-cross-x86_64-elf
 
 RUN apt-get update 

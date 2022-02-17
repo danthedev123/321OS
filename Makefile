@@ -28,24 +28,22 @@ clean:
 	@rm -r build
 
 run: $(iso)
-	@qemu-system-x86_64 -cdrom $(iso) -m 2G -machine type=q35
+	@qemu-system-x86_64 -cdrom $(iso) -M q35
 
 iso: $(iso)
-
-#limine:
-#	git clone https://github.com/limine-bootloader/limine.git --branch=v2.0-branch-binary --depth=1
-#	make -C limine
 
 $(iso): $(kernel) $(grub_cfg)
 	@mkdir -p build/isofiles/
 	@cp $(kernel) build/isofiles/kernel.elf
 	@cp src/arch/$(arch)/limine.cfg build/isofiles
-	@cp limine/limine.sys limine/limine-cd.bin limine/limine-eltorito-efi.bin build/isofiles
-	@xorriso -as mkisofs -b limine-cd.bin \
+	cp limine/limine.sys limine/limine-cd.bin limine/limine-eltorito-efi.bin build/isofiles
+	xorriso -as mkisofs -b limine-cd.bin \
 		-no-emul-boot -boot-load-size 4 -boot-info-table \
 		--efi-boot limine-eltorito-efi.bin \
 		-efi-boot-part --efi-boot-image --protective-msdos-label \
-		build/isofiles -o build/321OS-$(arch).iso
+		build/isofiles -o $(iso)
+
+	limine/limine-install $(iso)
 	@rm -rf build/isofiles
 
 $(kernel): $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files) $(linker_script)
@@ -54,7 +52,7 @@ $(kernel): $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files) $
 build/arch/$(arch)/interrupt_handlers.o: src/arch/$(arch)/interrupt_handlers.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@x86_64-elf-gcc -I src/include/ -c -mgeneral-regs-only -mno-red-zone -ffreestanding $< -o $@ -g -std=gnu11 -fno-stack-protector -fno-pic -fpie -mgeneral-regs-only -mno-red-zone
+	@x86_64-unknown-elf-gcc -I src/include/ -c -mgeneral-regs-only -mno-red-zone -ffreestanding $< -o $@ -g -std=gnu11 -fno-stack-protector -fno-pic -fpie -mgeneral-regs-only -mno-red-zone
 
 build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 	@printf "AS: $<\n"
@@ -65,9 +63,9 @@ build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 build/arch/$(arch)/%.o: src/arch/$(arch)/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@x86_64-elf-gcc -I src/include/ -c -ffreestanding $< -o $@ -g -std=gnu11 -fno-stack-protector -fno-pic -fpie -mgeneral-regs-only -mno-red-zone
+	@x86_64-unknown-elf-gcc -I src/include/ -c -ffreestanding $< -o $@ -g -std=gnu11 -fno-stack-protector -fno-pic -fpie -mgeneral-regs-only -mno-red-zone
 
 build/kernel/%.o: src/kernel/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@x86_64-elf-gcc -I src/include/ -c -ffreestanding $< -o $@ -g -std=gnu11 -fno-stack-protector -fno-pic -fpie -mgeneral-regs-only -mno-red-zone
+	@x86_64-unknown-elf-gcc -I src/include/ -c -ffreestanding $< -o $@ -g -std=gnu11 -fno-stack-protector -fno-pic -fpie -mgeneral-regs-only -mno-red-zone

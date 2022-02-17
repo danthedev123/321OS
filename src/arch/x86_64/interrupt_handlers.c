@@ -3,6 +3,7 @@
 #include "interrupts.h"
 #include "io/io.h"
 #include "../../kernel/stivale/terminal.h"
+#include "../../kernel/drivers/keyboard/keyboard.h"
 __attribute__((interrupt, noreturn)) void pageFaultHandler(struct interrupt_frame* frame)
 {
     terminal_printstr("panic: detected page fault");
@@ -32,9 +33,10 @@ void InitializeExceptionHandlers()
 
 __attribute__((interrupt)) void keyboardInterruptHandler(struct interrupt_frame* frame)
 {
-    terminal_printstr("pressed");
 
     uint8_t scancode = inb(0x60);
+
+    HandleKeyboardPress(scancode);
 
     PIC_EndMaster();
 }
