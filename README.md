@@ -22,3 +22,6 @@ chmod +x tools/crosscompiler.sh
 tools/crosscompiler.sh
 ```
 It will automatically build and install the toolchain. It will take around 20-30 minutes. If you're running a different distro, change the package manager commands or use this tutorial by OS Dev. https://wiki.osdev.org/GCC_Cross-Compiler
+
+## Docker (recommended)
+### Coming soon!
