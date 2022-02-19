@@ -2,7 +2,8 @@
 #include "idt.h"
 #include "interrupts.h"
 #include "io/io.h"
-
+#include "../../kernel/stivale/terminal.h"
+#include "../../kernel/drivers/keyboard/keyboard.h"
 __attribute__((interrupt, noreturn)) void pageFaultHandler(struct interrupt_frame* frame)
 {
     terminal_printstr("panic: detected page fault");
@@ -24,19 +25,18 @@ __attribute__((interrupt, noreturn)) void gpFaultHandler(struct interrupt_frame*
 
 void InitializeExceptionHandlers()
 {
-    CreateHandler((void*)pageFaultHandler, 0xE, IDT_TA_TrapGate, 0x08);
-    CreateHandler((void*)doubleFaultHandler, 0x8, IDT_TA_TrapGate, 0x08);
-    CreateHandler((void*)gpFaultHandler, 0xD, IDT_TA_TrapGate, 0x08);
-
-    terminal_printstr("SUCCESS: Initialized exception handlers");
+    CreateHandler((void*)pageFaultHandler, 0xE, IDT_TA_TrapGate, 0x28);
+    CreateHandler((void*)doubleFaultHandler, 0x8, IDT_TA_TrapGate, 0x28);
+    CreateHandler((void*)gpFaultHandler, 0xD, IDT_TA_TrapGate, 0x28);
 
 }
 
 __attribute__((interrupt)) void keyboardInterruptHandler(struct interrupt_frame* frame)
 {
-    terminal_printstr("pressed");
 
     uint8_t scancode = inb(0x60);
+
+    HandleKeyboardPress(scancode);
 
     PIC_EndMaster();
 }
