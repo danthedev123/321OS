@@ -81,9 +81,9 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
     outb(PIC1_DATA, 0b11111101);
     outb(PIC2_DATA, 0b11111111);
 
-    CreateHandler((void*)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x28);
-
     asm("sti");
+
+    CreateHandler((void*)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x28);
 
     while(1);
 }

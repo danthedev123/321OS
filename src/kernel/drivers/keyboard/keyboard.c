@@ -32,6 +32,11 @@ char ScancodeToChar(uint8_t scancode, bool uppercase)
 {
     if (scancode > 58) return 0;
 
+    if (uppercase)
+    {
+        return ASCIITable[scancode] - 32;
+    }
+
     return ASCIITable[scancode];
 }
 
@@ -44,6 +49,12 @@ void HandleKeyboardPress(uint8_t scancode)
             break;
         case ShiftRight:
             isRightShiftCurrentlyPressed = true;
+            break;
+        case ShiftLeft + 0x80:
+            isLeftShiftCurrentlyPressed = false;
+            break;
+        case ShiftRight + 0x80:
+            isRightShiftCurrentlyPressed = false;
             break;
         case Enter:
             terminal_putchar('\n');

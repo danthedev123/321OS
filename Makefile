@@ -5,6 +5,31 @@ kernel := build/kernel-$(arch).bin
 # Target ISO (cd-rom) file
 iso := build/321OS-$(arch).iso
 
+INTERNALLDFLAGS :=  \
+	-Tsrc/arch/$(arch)/linker.ld \
+	-nostdlib                \
+	-zmax-page-size=0x1000   \
+	-static
+
+INTERNALCFLAGS :=     \
+	-target x86_64-pc-none-elf \
+	-std=gnu17                 \
+	-ffreestanding             \
+	-fno-exceptions            \
+	-fno-stack-protector       \
+	-fno-use-cxa-atexit        \
+	-fno-omit-frame-pointer    \
+	-fno-rtti                  \
+	-fno-pic                   \
+	-mabi=sysv                 \
+	-mno-80387                 \
+	-mno-mmx                   \
+	-mno-3dnow                 \
+	-mno-sse                   \
+	-mno-sse2                  \
+	-mno-red-zone              \
+	-mcmodel=kernel
+
 linker_script := src/arch/$(arch)/linker.ld
 grub_cfg := src/arch/$(arch)/grub.cfg
 asm_source_files = $(shell find src/arch/$(arch)/ -type f -name '*.asm')
@@ -49,11 +74,6 @@ $(iso): $(kernel) $(grub_cfg)
 $(kernel): $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files) $(linker_script)
 	@ld -n -T $(linker_script) -o $(kernel) $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files)
 
-build/arch/$(arch)/interrupt_handlers.o: src/arch/$(arch)/interrupt_handlers.c
-	@printf "CC: $<\n"
-	@mkdir -p $(shell dirname $@)
-	@x86_64-unknown-elf-gcc -I src/include/ -c -mgeneral-regs-only -mno-red-zone -ffreestanding $< -o $@ -g -std=gnu11 -fno-stack-protector -fno-pic -fpie -mgeneral-regs-only -mno-red-zone
-
 build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 	@printf "AS: $<\n"
 	@mkdir -p $(shell dirname $@)
@@ -63,9 +83,9 @@ build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 build/arch/$(arch)/%.o: src/arch/$(arch)/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@x86_64-unknown-elf-gcc -I src/include/ -c -ffreestanding $< -o $@ -g -std=gnu11 -fno-stack-protector -fno-pic -fpie -mgeneral-regs-only -mno-red-zone
+	@clang -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ 
 
 build/kernel/%.o: src/kernel/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@x86_64-unknown-elf-gcc -I src/include/ -c -ffreestanding $< -o $@ -g -std=gnu11 -fno-stack-protector -fno-pic -fpie -mgeneral-regs-only -mno-red-zone
+	@clang -I src/include/ -c $(INTERNALCFLAGS) $< -o $@
