@@ -8,11 +8,11 @@
 //#include "../arch/x86_64/memory/memory.h"
 #include "../arch/x86_64/memory/Bitmap.h"
 //#include "../arch/x86_64/memory/paging/PageFrameAllocator.h"
-#include "stivale2.h"
-#include "stivale/stivale_tags.h"
-#include "stivale/terminal.h"
+#include <kernel/stivale/stivale2.h>
+#include <kernel/stivale/stivale_tags.h>
+#include <kernel/stivale/terminal.h>
 
-#include "format.h"
+#include <kernel/format.h>
 
 static uint8_t stack[8192];
 

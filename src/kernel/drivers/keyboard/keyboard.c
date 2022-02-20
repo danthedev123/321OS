@@ -1,6 +1,6 @@
-#include "keyboard.h"
-#include <bool.h>
-#include "../../stivale/terminal.h"
+#include <kernel/drivers/keyboard/keyboard.h>
+#include <kernel/bool.h>
+#include <kernel/stivale/terminal.h>
 
 #define ShiftLeft 0x2A
 #define ShiftRight 0x36

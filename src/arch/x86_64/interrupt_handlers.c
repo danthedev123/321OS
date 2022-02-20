@@ -2,8 +2,8 @@
 #include "idt.h"
 #include "interrupts.h"
 #include "io/io.h"
-#include "../../kernel/stivale/terminal.h"
-#include "../../kernel/drivers/keyboard/keyboard.h"
+#include <kernel/stivale/terminal.h>
+#include <kernel/drivers/keyboard/keyboard.h>
 
 __attribute__((interrupt, noreturn)) void pageFaultHandler(struct interrupt_frame* frame)
 {

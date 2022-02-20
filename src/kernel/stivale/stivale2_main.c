@@ -1,11 +1,10 @@
-#include "stivale2_main.h"
 #include <stdint.h>
-#include "../stivale2.h"
+#include <kernel/stivale/stivale2.h>
 #include <stddef.h>
-#include "stivale_tags.h"
-#include <bool.h>
+#include <kernel/stivale/stivale_tags.h>
+#include <kernel/bool.h>
 #include "../../arch/x86_64/memory/memory.h"
-#include "terminal.h"
+#include <kernel/stivale/terminal.h>
 
 bool Tags_Initialized = false;
 

@@ -1,6 +1,6 @@
 #pragma once
-#include "../stivale2.h"
-#include "../../arch/x86_64/memory/memory.h"
+#include "stivale2.h"
+#include "../../../arch/x86_64/memory/memory.h"
 
 struct stivale_tags
 {

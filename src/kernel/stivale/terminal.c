@@ -1,6 +1,5 @@
-#include "terminal.h"
-#include "stivale2_main.h"
-#include "stivale_tags.h"
+#include <kernel/stivale/terminal.h>
+#include <kernel/stivale/stivale_tags.h>
 #include <stddef.h>
 
 void (*stivale2_write)(const char* buf, size_t size) = NULL;
