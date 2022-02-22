@@ -53,7 +53,7 @@ clean:
 	@rm -r build
 
 run: $(iso)
-	@qemu-system-x86_64 -cdrom $(iso) -M q35
+	@qemu-system-x86_64 -cdrom $(iso) -M q35 -m 2G
 
 iso: $(iso)
 

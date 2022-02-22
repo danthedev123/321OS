@@ -8,6 +8,7 @@
 //#include "../arch/x86_64/memory/memory.h"
 #include "../arch/x86_64/memory/Bitmap.h"
 //#include "../arch/x86_64/memory/paging/PageFrameAllocator.h"
+#include "../arch/x86_64/memory/paging/mem_frame.h"
 #include <kernel/stivale/stivale2.h>
 #include <kernel/stivale/stivale_tags.h>
 #include <kernel/stivale/terminal.h>
@@ -84,6 +85,9 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
     asm("sti");
 
     CreateHandler((void*)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x28);
+
+    PageFrameInitialize();
+
 
     while(1);
 }

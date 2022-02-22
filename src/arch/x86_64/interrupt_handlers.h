@@ -18,6 +18,7 @@ __attribute__((interrupt, noreturn)) void doubleFaultHandler(struct interrupt_fr
 __attribute__((interrupt, noreturn)) void gpFaultHandler(struct interrupt_frame* frame);
 __attribute__((interrupt)) void keyboardInterruptHandler(struct interrupt_frame* frame);
 
+
 void InitializeExceptionHandlers();
 
 void RemapPIC();

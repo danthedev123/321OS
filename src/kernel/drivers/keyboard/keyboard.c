@@ -1,5 +1,5 @@
 #include <kernel/drivers/keyboard/keyboard.h>
-#include <kernel/bool.h>
+#include <stdbool.h>
 #include <kernel/stivale/terminal.h>
 
 #define ShiftLeft 0x2A
