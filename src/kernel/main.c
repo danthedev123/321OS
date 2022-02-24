@@ -88,6 +88,5 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
 
     PageFrameInitialize();
 
-
     while(1);
 }

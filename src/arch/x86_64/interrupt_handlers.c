@@ -24,11 +24,18 @@ __attribute__((interrupt, noreturn)) void gpFaultHandler(struct interrupt_frame*
     
 }
 
+__attribute__((interrupt, noreturn)) void divisionByZeroHandler(struct interrupt_frame* frame)
+{
+    terminal_printstr("panic: detected divison by zero");
+    while(1);
+}
+
 void InitializeExceptionHandlers()
 {
     CreateHandler((void*)pageFaultHandler, 0xE, IDT_TA_TrapGate, 0x28);
     CreateHandler((void*)doubleFaultHandler, 0x8, IDT_TA_TrapGate, 0x28);
     CreateHandler((void*)gpFaultHandler, 0xD, IDT_TA_TrapGate, 0x28);
+    CreateHandler((void*)divisionByZeroHandler, 0x0, IDT_TA_TrapGate, 0x28);
 }
 
 __attribute__((interrupt)) void keyboardInterruptHandler(struct interrupt_frame* frame)

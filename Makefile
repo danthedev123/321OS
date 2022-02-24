@@ -29,7 +29,7 @@ INTERNALCFLAGS :=     \
 	-mno-sse2                  \
 	-mno-red-zone              \
 	-mcmodel=kernel
-
+	
 linker_script := src/arch/$(arch)/linker.ld
 grub_cfg := src/arch/$(arch)/grub.cfg
 asm_source_files = $(shell find src/arch/$(arch)/ -type f -name '*.asm')

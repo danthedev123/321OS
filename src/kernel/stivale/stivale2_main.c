@@ -2,7 +2,7 @@
 #include <kernel/stivale/stivale2.h>
 #include <stddef.h>
 #include <kernel/stivale/stivale_tags.h>
-#include <kernel/bool.h>
+#include <stdbool.h>
 #include "../../arch/x86_64/memory/memory.h"
 #include <kernel/stivale/terminal.h>
 
