@@ -45,7 +45,11 @@ kernel_c_source_files = $(shell find src/kernel/ -type f -name '*.c')
 kernel_c_object_files := $(patsubst src/kernel/%.c, \
 	build/kernel/%.o, $(kernel_c_source_files))
 
-.PHONY: all clean run iso limine
+.PHONY: all clean run iso
+
+limine:
+	git clone https://github.com/limine-bootloader/limine.git --branch=v2.0-branch-binary --depth=1
+	make -C limine
 
 all: $(kernel)
 
@@ -57,7 +61,7 @@ run: $(iso)
 
 iso: $(iso)
 
-$(iso): $(kernel) $(grub_cfg)
+$(iso): $(kernel) $(grub_cfg) limine
 	@mkdir -p build/isofiles/
 	@cp $(kernel) build/isofiles/kernel.elf
 	@cp src/arch/$(arch)/limine.cfg build/isofiles
