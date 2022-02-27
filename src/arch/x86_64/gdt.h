@@ -28,10 +28,13 @@ struct GDT
     struct GDTEntry _64bitData;
     struct GDTEntry UserData;
     struct GDTEntry UserCode;
-    struct GDTEntry reserved;
+    struct GDTEntry TssLower;
+    struct GDTEntry TssUpper;
 }__attribute__((packed))
 __attribute__((aligned(0x1000)));
 
 extern struct GDT DefaultGDT;
 
 extern void LoadGDT(struct GDTDescriptor* gdtDescriptor);
+
+void init_tss();

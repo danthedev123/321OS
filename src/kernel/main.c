@@ -57,8 +57,11 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
 {
     struct GDTDescriptor gdtDescriptor;
 
+    init_tss();
+
     gdtDescriptor.Size = sizeof(struct GDT) - 1;
     gdtDescriptor.Offset = (uint64_t)&DefaultGDT;
+
     LoadGDT(&gdtDescriptor);
 
     // Initialize tags struct, terminal and memory map

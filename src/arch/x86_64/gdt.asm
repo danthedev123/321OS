@@ -4,6 +4,8 @@ section .text
 bits 64
 LoadGDT:
     lgdt [rdi]
+    mov ax, 0x48
+    ltr ax
     mov ax, 0x30
     mov ds, ax
     mov es, ax
@@ -14,4 +16,4 @@ LoadGDT:
     mov rax, 0x28
     push rax
     push rdi
-    retfq
+    lretq
