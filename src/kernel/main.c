@@ -12,6 +12,7 @@
 #include <kernel/stivale/stivale2.h>
 #include <kernel/stivale/stivale_tags.h>
 #include <kernel/stivale/terminal.h>
+#include <kernel/drivers/serial/serial.h>
 
 #include <kernel/format.h>
 
@@ -91,5 +92,7 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
 
     PageFrameInitialize();
 
+    InitializeSerial();
+    
     while(1);
 }
