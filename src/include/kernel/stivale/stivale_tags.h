@@ -8,6 +8,7 @@ struct stivale_tags
     struct stivale2_struct_tag_memmap* memory_map_tag;
     struct stivale2_struct_tag_framebuffer* fb;
     struct MemoryMap* mmap;
+    struct stivale2_struct_tag_rsdp* rsdp;
 };
 
 struct stivale_tags* GetTags();

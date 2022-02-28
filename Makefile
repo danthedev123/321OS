@@ -57,7 +57,7 @@ clean:
 	@rm -r build
 
 run: $(iso)
-	@qemu-system-x86_64 -cdrom $(iso) -M q35 -m 2G -serial stdio
+	@qemu-system-x86_64 -cdrom $(iso) -M q35 -m 2G -serial stdio -d int -D kernel.log
 
 iso: $(iso)
 
