@@ -8,6 +8,8 @@
 #include <stdint.h>
 #include <kernel/format.h>
 #include "../Bitmap.h"
+#include <kernel/utility/kernelLog/logger.h>
+
 
 #define PAGE_SIZE 4096
 
@@ -173,7 +175,7 @@ void PageFrameInitialize()
 
     ReservePages(0, 256);
 
-    terminal_printstr("SUCCESS: Initialized page frame allocator");
+    kernelLogSuccess("SUCCESS: Initialized page frame allocator");
 }
 
 size_t GetReservedRAMSize()

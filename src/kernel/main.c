@@ -9,7 +9,7 @@
 #include <kernel/stivale/stivale_tags.h>
 #include <kernel/stivale/terminal.h>
 #include <kernel/drivers/serial/serial.h>
-
+#include <kernel/utility/kernelLog/logger.h>
 #include <kernel/format.h>
 
 void kernel_main(struct stivale2_struct* stivale2_struct)
@@ -45,6 +45,10 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
     terminal_printstr("\n");
 
     asm ("sti");
+
+    kernelLogSuccess("Kernel initialized successfully");
+
+    kernelLogFail("Something failed. I don't know what, though.");
 
     while(1)
     {

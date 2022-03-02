@@ -4,6 +4,8 @@
 #include "io/io.h"
 #include <kernel/stivale/terminal.h>
 #include <kernel/drivers/keyboard/keyboard.h>
+#include <kernel/utility/kernelLog/logger.h>
+
 
 __attribute__((noreturn)) void pageFaultHandler(struct interrupt_frame* frame)
 {
@@ -92,5 +94,5 @@ void RemapPIC()
     io_wait();
     outb(PIC2_DATA, a2);
 
-    terminal_printstr("SUCCESS: PIC Initialized successfully\n");
+    kernelLogSuccess("SUCCESS: PIC Initialized successfully");
 }
