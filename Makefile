@@ -57,8 +57,7 @@ clean:
 	@rm -r build
 
 run: $(iso)
-	@qemu-system-x86_64 -cdrom $(iso) -M q35 -m 2G -serial stdio -d int -D kernel.log
-
+	@qemu-system-x86_64 -cdrom $(iso) -M q35 -m 2G
 iso: $(iso)
 
 $(iso): $(kernel) $(grub_cfg) limine
@@ -87,9 +86,9 @@ build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 build/arch/$(arch)/%.o: src/arch/$(arch)/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@clang -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ 
+	@clang -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
 
 build/kernel/%.o: src/kernel/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@clang -I src/include/ -c $(INTERNALCFLAGS) $< -o $@
+	@clang -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g

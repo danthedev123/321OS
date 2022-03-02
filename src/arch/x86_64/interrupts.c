@@ -1,5 +1,8 @@
 
 #include "idt.h"
+#include "interrupts.h"
+#include <kernel/stivale/terminal.h>
+#include <kernel/drivers/serial/serial.h>
 
 struct IDTR idtr;
 

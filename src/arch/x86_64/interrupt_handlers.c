@@ -5,26 +5,26 @@
 #include <kernel/stivale/terminal.h>
 #include <kernel/drivers/keyboard/keyboard.h>
 
-__attribute__((interrupt, noreturn)) void pageFaultHandler(struct interrupt_frame* frame)
+__attribute__((noreturn)) void pageFaultHandler(struct interrupt_frame* frame)
 {
     terminal_printstr("panic: detected page fault");
     while(1);
 }
 
-__attribute__((interrupt, noreturn)) void doubleFaultHandler(struct interrupt_frame* frame)
+__attribute__((noreturn)) void doubleFaultHandler(struct interrupt_frame* frame)
 {
     terminal_printstr("panic: detected double fault");
     while(1);
 }
 
-__attribute__((interrupt, noreturn)) void gpFaultHandler(struct interrupt_frame* frame)
+__attribute__((noreturn)) void gpFaultHandler(struct interrupt_frame* frame)
 {
     terminal_printstr("panic: detected general protection fault");
     while(1);
     
 }
 
-__attribute__((interrupt, noreturn)) void divisionByZeroHandler(struct interrupt_frame* frame)
+__attribute__((noreturn)) void divisionByZeroHandler(struct interrupt_frame* frame)
 {
     terminal_printstr("panic: detected divison by zero");
     while(1);
@@ -32,13 +32,13 @@ __attribute__((interrupt, noreturn)) void divisionByZeroHandler(struct interrupt
 
 void InitializeExceptionHandlers()
 {
-    CreateHandler((void*)pageFaultHandler, 0xE, IDT_TA_TrapGate, 0x28);
-    CreateHandler((void*)doubleFaultHandler, 0x8, IDT_TA_TrapGate, 0x28);
-    CreateHandler((void*)gpFaultHandler, 0xD, IDT_TA_TrapGate, 0x28);
-    CreateHandler((void*)divisionByZeroHandler, 0x0, IDT_TA_TrapGate, 0x28);
+    CreateHandler((void*)int_pageFault, 0xE, IDT_TA_TrapGate, 0x28);
+    CreateHandler((void*)int_doubleFault, 0x8, IDT_TA_TrapGate, 0x28);
+    CreateHandler((void*)int_gpFault, 0xD, IDT_TA_TrapGate, 0x28);
+    CreateHandler((void*)int_divisionByZero, 0x0, IDT_TA_TrapGate, 0x28);
 }
 
-__attribute__((interrupt)) void keyboardInterruptHandler(struct interrupt_frame* frame)
+void keyboardInterruptHandler(struct interrupt_frame* frame)
 {
 
     uint8_t scancode = inb(0x60);
