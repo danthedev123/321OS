@@ -94,5 +94,5 @@ void RemapPIC()
     io_wait();
     outb(PIC2_DATA, a2);
 
-    kernelLogSuccess("SUCCESS: PIC Initialized successfully");
+    kernelLogSuccess("PIC Initialized successfully");
 }

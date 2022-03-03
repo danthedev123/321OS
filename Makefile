@@ -31,7 +31,6 @@ INTERNALCFLAGS :=     \
 	-mcmodel=kernel
 	
 linker_script := src/arch/$(arch)/linker.ld
-grub_cfg := src/arch/$(arch)/grub.cfg
 asm_source_files = $(shell find src/arch/$(arch)/ -type f -name '*.asm')
 asm_object_files := $(patsubst src/arch/$(arch)/%.asm, \
 	build/arch/$(arch)/%_asm.o, $(asm_source_files))
@@ -47,9 +46,6 @@ kernel_c_object_files := $(patsubst src/kernel/%.c, \
 
 .PHONY: all clean run iso
 
-limine:
-	git clone https://github.com/limine-bootloader/limine.git --branch=v2.0-branch-binary --depth=1
-	make -C limine
 
 all: $(kernel)
 
@@ -60,7 +56,7 @@ run: $(iso)
 	@qemu-system-x86_64 -cdrom $(iso) -M q35 -m 2G
 iso: $(iso)
 
-$(iso): $(kernel) $(grub_cfg) limine
+$(iso): $(kernel) limine
 	@mkdir -p build/isofiles/
 	@cp $(kernel) build/isofiles/kernel.elf
 	@cp src/arch/$(arch)/limine.cfg build/isofiles
@@ -92,3 +88,7 @@ build/kernel/%.o: src/kernel/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
 	@clang -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
+
+limine:
+	git clone https://github.com/limine-bootloader/limine.git --branch=v2.0-branch-binary --depth=1
+	make -C limine

@@ -26,6 +26,7 @@ struct GDT
     struct GDTEntry _32bitData;
     struct GDTEntry _64bitCode;
     struct GDTEntry _64bitData;
+    struct GDTEntry UserNull;
     struct GDTEntry UserData;
     struct GDTEntry UserCode;
     struct GDTEntry TssLower;

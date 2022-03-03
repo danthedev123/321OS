@@ -23,6 +23,8 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
 
     LoadGDT(&gdtDescriptor);
 
+    kernelLogSuccess("GDT loaded successfully");
+
     stivale_init(stivale2_struct);
 
     InitInterrupts();
@@ -31,6 +33,8 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
     RemapPIC();
 
     InitializeExceptionHandlers();
+
+    kernelLogSuccess("Interrupts initialized successfully");
 
     outb(PIC1_DATA, 0b11111101);
     outb(PIC2_DATA, 0b11111111);
@@ -41,14 +45,14 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
 
     InitializeSerial();
 
+    kernelLogSuccess("Serial initialized successfully");
+
     terminal_printstr("\n");
     terminal_printstr("\n");
 
     asm ("sti");
 
     kernelLogSuccess("Kernel initialized successfully");
-
-    kernelLogFail("Something failed. I don't know what, though.");
 
     while(1)
     {

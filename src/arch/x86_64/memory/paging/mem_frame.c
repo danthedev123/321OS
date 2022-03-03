@@ -175,7 +175,7 @@ void PageFrameInitialize()
 
     ReservePages(0, 256);
 
-    kernelLogSuccess("SUCCESS: Initialized page frame allocator");
+    kernelLogSuccess("Initialized page frame allocator");
 }
 
 size_t GetReservedRAMSize()

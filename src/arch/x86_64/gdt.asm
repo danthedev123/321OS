@@ -4,7 +4,7 @@ section .text
 bits 64
 LoadGDT:
     lgdt [rdi]
-    mov ax, 0x48
+    mov ax, 0x50
     ltr ax
     mov ax, 0x30
     mov ds, ax
