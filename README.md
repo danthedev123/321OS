@@ -11,6 +11,8 @@
    <a href="https://github.com/danthedev123/321os/issues">Request feature</a>
   </p>
 
+![321OS screenshot](https://i.imgur.com/aasvcoE.png)
+
 
 ## Features
 - Uses clang compiler
