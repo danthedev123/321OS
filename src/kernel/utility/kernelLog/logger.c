@@ -1,4 +1,5 @@
 #include <kernel/stivale/terminal.h>
+#include <kernel/drivers/serial/serial.h>
 
 
 void kernelLogSuccess(char* str)
@@ -11,6 +12,13 @@ void kernelLogSuccess(char* str)
     terminal_printstr(" ] ");
     terminal_printstr(str);
     terminal_printstr("\n");
+
+    serial_writestring(" ");
+    serial_writestring("success");
+    serial_writestring("  ");
+    serial_writestring(str);
+    serial_writestring("\r\n");
+
 }
 
 void kernelLogFail(char* str)
@@ -22,4 +30,10 @@ void kernelLogFail(char* str)
     terminal_printstr(" ] ");
     terminal_printstr(str);
     terminal_printstr("\n"); 
+
+    serial_writestring(" ");
+    serial_writestring("fail");
+    serial_writestring("  ");
+    serial_writestring(str);
+    serial_writestring("\r\n");
 }
