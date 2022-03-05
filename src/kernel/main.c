@@ -65,7 +65,7 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
     outb(PIC1_DATA, 0b11111101);
     outb(PIC2_DATA, 0b11111111);
 
-    CreateHandler((void*)int_keyboard, 0x21, IDT_TA_InterruptGate, 0x28);
+    CreateHandler((void*)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x28);
 
     PageFrameInitialize();
 
@@ -77,7 +77,7 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
     asm ("sti");
 
     kernelLogSuccess("Kernel initialized successfully");
-    
+
 
     while(1)
     {

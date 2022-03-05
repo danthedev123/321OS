@@ -5,6 +5,9 @@ kernel := build/kernel-$(arch).bin
 # Target ISO (cd-rom) file
 iso := build/321OS-$(arch).iso
 
+# Target compiler. User controllable.
+cc ?= gcc
+
 INTERNALLDFLAGS :=  \
 	-Tsrc/arch/$(arch)/linker.ld \
 	-nostdlib                \
@@ -12,14 +15,11 @@ INTERNALLDFLAGS :=  \
 	-static
 
 INTERNALCFLAGS :=     \
-	-target x86_64-pc-none-elf \
 	-std=gnu17                 \
 	-ffreestanding             \
 	-fno-exceptions            \
 	-fno-stack-protector       \
-	-fno-use-cxa-atexit        \
 	-fno-omit-frame-pointer    \
-	-fno-rtti                  \
 	-fno-pic                   \
 	-mabi=sysv                 \
 	-mno-80387                 \
@@ -82,12 +82,12 @@ build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 build/arch/$(arch)/%.o: src/arch/$(arch)/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@clang -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
+	@$(cc) -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
 
 build/kernel/%.o: src/kernel/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@clang -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
+	@$(cc) -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
 
 limine:
 	git clone https://github.com/limine-bootloader/limine.git --branch=v2.0-branch-binary --depth=1

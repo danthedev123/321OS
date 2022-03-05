@@ -15,7 +15,7 @@
 
 
 ## Features
-- Uses clang compiler
+- Support for both gcc and clang compilers
 - Stivale2 protocol, uses Limine bootloader.
 - Custom GDT
 - Interrupts
