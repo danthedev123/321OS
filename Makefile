@@ -53,7 +53,7 @@ clean:
 	@rm -r build
 
 run: $(iso)
-	@qemu-system-x86_64 -cdrom $(iso) -M q35 -m 2G -serial stdio
+	@qemu-system-x86_64 -cdrom $(iso) -M q35 -m 500M -serial stdio -soundhw pcspk
 iso: $(iso)
 
 $(iso): $(kernel) limine

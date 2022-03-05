@@ -20,6 +20,8 @@
 - Custom GDT
 - Interrupts
 - Keyboard support
+- Beeping using IBM PC Speaker
+
 
 ## Required tools
 On Debian, Ubuntu or Mint use this command to install all the required tools

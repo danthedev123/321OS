@@ -11,6 +11,9 @@
 #include <kernel/drivers/serial/serial.h>
 #include <kernel/utility/kernelLog/logger.h>
 #include <kernel/format.h>
+#include <kernel/lib/string.h>
+#include <kernel/drivers/sound/pcspeaker.h>
+#include "../arch/x86_64/memory/paging/page_map_indexer.h"
 
 void kernel_main(struct stivale2_struct* stivale2_struct)
 {
@@ -74,9 +77,11 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
     asm ("sti");
 
     kernelLogSuccess("Kernel initialized successfully");
+    
 
     while(1)
     {
-        asm ("hlt");
+        asm("hlt");
+        
     }
 }
