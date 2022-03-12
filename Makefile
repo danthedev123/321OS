@@ -28,7 +28,8 @@ INTERNALCFLAGS :=     \
 	-mno-sse                   \
 	-mno-sse2                  \
 	-mno-red-zone              \
-	-mcmodel=kernel
+	-mcmodel=kernel			   \
+	-Werror
 	
 linker_script := src/arch/$(arch)/linker.ld
 asm_source_files = $(shell find src/arch/$(arch)/ -type f -name '*.asm')

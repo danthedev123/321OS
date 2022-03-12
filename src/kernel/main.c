@@ -3,7 +3,6 @@
 #include "../arch/x86_64/idt.h"
 #include "../arch/x86_64/io/io.h"
 #include "../arch/x86_64/gdt.h"
-#include "../arch/x86_64/memory/Bitmap.h"
 #include "../arch/x86_64/memory/paging/mem_frame.h"
 #include <kernel/stivale/stivale2.h>
 #include <kernel/stivale/stivale_tags.h>
@@ -13,7 +12,6 @@
 #include <kernel/format.h>
 #include <kernel/lib/string.h>
 #include <kernel/drivers/sound/pcspeaker.h>
-#include "../arch/x86_64/memory/paging/page_map_indexer.h"
 
 void kernel_main(struct stivale2_struct* stivale2_struct)
 {
@@ -69,14 +67,12 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
 
     PageFrameInitialize();
 
-    kernelLogSuccess("Serial initialized successfully");
-
-    terminal_printstr("\n");
-    terminal_printstr("\n");
-
     asm ("sti");
 
     kernelLogSuccess("Kernel initialized successfully");
+
+    serial_writestring("Running PC speaker test beep");
+    play_sound(1000);
 
 
     while(1)
