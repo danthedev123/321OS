@@ -45,5 +45,4 @@ void init_tss()
 
     DefaultGDT.TssUpper.limit0 = (tss_base >> 32) & 0xffff;
     DefaultGDT.TssUpper.base0 = (tss_base >> 48) & 0xffff;
-
 }

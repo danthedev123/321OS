@@ -5,6 +5,9 @@ kernel := build/kernel-$(arch).bin
 # Target ISO (cd-rom) file
 iso := build/321OS-$(arch).iso
 
+# Target compiler. User controllable.
+cc ?= gcc
+
 INTERNALLDFLAGS :=  \
 	-Tsrc/arch/$(arch)/linker.ld \
 	-nostdlib                \
@@ -12,14 +15,11 @@ INTERNALLDFLAGS :=  \
 	-static
 
 INTERNALCFLAGS :=     \
-	-target x86_64-pc-none-elf \
 	-std=gnu17                 \
 	-ffreestanding             \
 	-fno-exceptions            \
 	-fno-stack-protector       \
-	-fno-use-cxa-atexit        \
 	-fno-omit-frame-pointer    \
-	-fno-rtti                  \
 	-fno-pic                   \
 	-mabi=sysv                 \
 	-mno-80387                 \
@@ -28,7 +28,8 @@ INTERNALCFLAGS :=     \
 	-mno-sse                   \
 	-mno-sse2                  \
 	-mno-red-zone              \
-	-mcmodel=kernel
+	-mcmodel=kernel			   \
+	-Werror
 	
 linker_script := src/arch/$(arch)/linker.ld
 asm_source_files = $(shell find src/arch/$(arch)/ -type f -name '*.asm')
@@ -53,7 +54,7 @@ clean:
 	@rm -r build
 
 run: $(iso)
-	@qemu-system-x86_64 -cdrom $(iso) -M q35 -m 2G -serial stdio
+	@qemu-system-x86_64 -cdrom $(iso) -M q35 -m 500M -serial stdio -soundhw pcspk
 iso: $(iso)
 
 $(iso): $(kernel) limine
@@ -82,12 +83,12 @@ build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 build/arch/$(arch)/%.o: src/arch/$(arch)/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@clang -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
+	@$(cc) -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
 
 build/kernel/%.o: src/kernel/%.c
 	@printf "CC: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@clang -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
+	@$(cc) -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
 
 limine:
 	git clone https://github.com/limine-bootloader/limine.git --branch=v2.0-branch-binary --depth=1

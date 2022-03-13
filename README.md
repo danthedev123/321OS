@@ -15,11 +15,13 @@
 
 
 ## Features
-- Uses clang compiler
+- Support for both gcc and clang compilers
 - Stivale2 protocol, uses Limine bootloader.
 - Custom GDT
 - Interrupts
 - Keyboard support
+- Beeping using IBM PC Speaker
+
 
 ## Required tools
 On Debian, Ubuntu or Mint use this command to install all the required tools

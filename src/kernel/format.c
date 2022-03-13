@@ -25,6 +25,7 @@ char* itoa(int val, int base){
 
     int i = 30;
 
+
     for(; val && i ; --i, val /= base)
     {
         buf[i] = "0123456789abcdef"[val % base];

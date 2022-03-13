@@ -1,11 +1,13 @@
 #include <kernel/drivers/keyboard/keyboard.h>
 #include <stdbool.h>
 #include <kernel/stivale/terminal.h>
+#include <stddef.h>
 
 #define ShiftLeft 0x2A
 #define ShiftRight 0x36
 #define Enter 0x1C
 #define Space 0x39
+#define Backspace 0x0E
 
 bool isLeftShiftCurrentlyPressed;
 bool isRightShiftCurrentlyPressed;
@@ -57,11 +59,13 @@ void HandleKeyboardPress(uint8_t scancode)
             isRightShiftCurrentlyPressed = false;
             break;
         case Enter:
-            terminal_putchar('\n');
+            terminal_printstr("\n");
             break;
         case Space:
             terminal_printstr(" ");
             break;
+        case Backspace:
+            terminal_printstr("\b \b");
         default:
             terminal_putchar(ScancodeToChar(scancode, isLeftShiftCurrentlyPressed | isRightShiftCurrentlyPressed));
             break;
