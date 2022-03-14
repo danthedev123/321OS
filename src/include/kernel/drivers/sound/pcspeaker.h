@@ -6,3 +6,4 @@
 // @params:
 // nFrequence: Frequency of the sound to play.
 void play_sound(uint32_t nFrequence);
+void pcspeaker_quiet();

@@ -74,6 +74,8 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
     serial_writestring("Running PC speaker test beep");
     play_sound(1000);
 
+    pcspeaker_quiet();
+
 
     while(1)
     {
