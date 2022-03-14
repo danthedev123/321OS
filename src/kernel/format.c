@@ -25,6 +25,11 @@ char* itoa(int val, int base){
 
     int i = 30;
 
+    if (!val)
+    {
+        return "0";
+    }
+
 
     for(; val && i ; --i, val /= base)
     {
