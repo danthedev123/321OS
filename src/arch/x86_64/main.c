@@ -42,7 +42,7 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
 
     kernelLogSuccess("GDT loaded successfully");
 
-    serial_writestring("    - GDT Offset = ");
+    serial_writestring("    - GDT Offset  = ");
     serial_writestring(hexToString((uint64_t)gdtDescriptor.Offset));
     serial_writestring("\r\n");
     serial_writestring("    - GDT Limit   = ");
@@ -66,16 +66,8 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
     CreateHandler((void*)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x28);
 
     PageFrameInitialize();
-
+    
     asm ("sti");
-
-    kernelLogSuccess("Kernel initialized successfully");
-
-    serial_writestring("Running PC speaker test beep");
-    play_sound(1000);
-
-    pcspeaker_quiet();
-
 
     while(1)
     {

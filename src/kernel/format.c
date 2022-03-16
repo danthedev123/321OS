@@ -7,7 +7,7 @@ char* hexToString(uint64_t value)
     uint8_t* ptr;
     uint8_t tmp;
     uint8_t size = 8 * 2 - 1;
-    for (uint8_t i = 0; i < size / 2 + 1; i++)
+    for (uint8_t i = 0; i < size; i++)
     {
         ptr = ((uint8_t*)valPtr + i);
         tmp = ((*ptr & 0xF0) >> 4);

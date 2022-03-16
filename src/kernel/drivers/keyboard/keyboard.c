@@ -59,10 +59,10 @@ void HandleKeyboardPress(uint8_t scancode)
             isRightShiftCurrentlyPressed = false;
             break;
         case Enter:
-            terminal_printstr("\n");
+            terminal_putchar('\n');
             break;
         case Space:
-            terminal_printstr(" ");
+            terminal_putchar(' ');
             break;
         case Backspace:
             terminal_printstr("\b \b");
