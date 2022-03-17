@@ -13,7 +13,6 @@ extern void** _KernelEnd;
 extern void** _KernelBase;
 
 void memset(void* start, uint8_t value, uint64_t num);
-void memzero(void* start, uint64_t num);
 
 enum EntryType
 {

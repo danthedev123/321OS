@@ -33,7 +33,7 @@ struct GDT DefaultGDT = {
 
 void init_tss()
 {
-    memzero((void*)&tss, sizeof(tss));
+    memset((void*)&tss, 0, sizeof(tss));
 
     uint64_t tss_base = ((uint64_t)&tss);
 
