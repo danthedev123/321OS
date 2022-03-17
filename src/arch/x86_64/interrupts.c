@@ -3,6 +3,7 @@
 #include "interrupts.h"
 #include <kernel/stivale/terminal.h>
 #include <kernel/drivers/serial/serial.h>
+#include "memory/paging/mem_frame.h"
 
 struct IDTR idtr;
 
@@ -11,7 +12,7 @@ struct IDTDescriptorEntry idt_entries[256];
 void InitInterrupts()
 {
     idtr.limit = 0x0FFF;
-    idtr.offset = (uint64_t)&idt_entries;    
+    idtr.offset = (uint64_t)RequestPage();  
 }
 
 void CreateHandler(void* handlerFunction, uint8_t entryOffset, uint8_t type_attr, uint8_t sel)

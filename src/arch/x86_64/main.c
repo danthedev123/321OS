@@ -50,6 +50,7 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
     serial_writestring("\r\n");
 
     stivale_init(stivale2_struct);
+    PageFrameInitialize();
 
     InitInterrupts();
     InitIDT();
@@ -65,7 +66,6 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
 
     CreateHandler((void*)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x28);
 
-    PageFrameInitialize();
     
     asm ("sti");
 
