@@ -6,7 +6,7 @@ kernel := build/kernel-$(arch).bin
 iso := build/321OS-$(arch).iso
 
 # Target compiler. User controllable.
-cc ?= gcc
+cc ?= x86_64-elf-gcc
 
 INTERNALLDFLAGS :=  \
 	-Tsrc/arch/$(arch)/linker.ld \
@@ -72,7 +72,7 @@ $(iso): $(kernel) limine
 	@rm -rf build/isofiles
 
 $(kernel): $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files) $(linker_script)
-	@ld -n -T $(linker_script) -o $(kernel) $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files)
+	@x86_64-elf-ld -n -T $(linker_script) -o $(kernel) $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files)
 
 build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 	@printf "AS: $<\n"

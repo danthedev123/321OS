@@ -13,11 +13,10 @@
 #include <kernel/lib/string.h>
 #include <kernel/drivers/sound/pcspeaker.h>
 
-void kernel_main(struct stivale2_struct* stivale2_struct)
+void kernel_main(struct stivale2_struct *stivale2_struct)
 {
     InitializeSerial();
 
-    
     serial_writestring("  ____ ___  __  ____   _____ ");
     serial_writestring("\r\n");
     serial_writestring(" |___ \\__ \\/_ |/ __ \\ / ____|");
@@ -64,14 +63,12 @@ void kernel_main(struct stivale2_struct* stivale2_struct)
     outb(PIC1_DATA, 0b11111101);
     outb(PIC2_DATA, 0b11111111);
 
-    CreateHandler((void*)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x28);
+    CreateHandler((void *)keyboardInterruptHandler, 0x21, IDT_TA_InterruptGate, 0x28);
 
-    
-    asm ("sti");
+    asm("sti");
 
-    while(1)
+    while (1)
     {
-        asm("hlt");
-        
+        asm("hlt"); // Halt until cpu interrupt is recieved
     }
 }

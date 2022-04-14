@@ -12,12 +12,12 @@ struct IDTDescriptorEntry idt_entries[256];
 void InitInterrupts()
 {
     idtr.limit = 0x0FFF;
-    idtr.offset = (uint64_t)RequestPage();  
+    idtr.offset = (uint64_t)RequestPage();
 }
 
-void CreateHandler(void* handlerFunction, uint8_t entryOffset, uint8_t type_attr, uint8_t sel)
+void CreateHandler(void *handlerFunction, uint8_t entryOffset, uint8_t type_attr, uint8_t sel)
 {
-    struct IDTDescriptorEntry* newInterrupt = (struct IDTDescriptorEntry*)(idtr.offset + entryOffset * sizeof(struct IDTDescriptorEntry));
+    struct IDTDescriptorEntry *newInterrupt = (struct IDTDescriptorEntry *)(idtr.offset + entryOffset * sizeof(struct IDTDescriptorEntry));
 
     newInterrupt->offset0 = (uint16_t)((uint64_t)handlerFunction & 0x000000000000ffff);
     newInterrupt->offset1 = (uint16_t)(((uint64_t)handlerFunction & 0x00000000ffff0000) >> 16);
@@ -29,5 +29,7 @@ void CreateHandler(void* handlerFunction, uint8_t entryOffset, uint8_t type_attr
 
 void InitIDT()
 {
-    asm("lidt %0" : : "m" (idtr));
+    asm("lidt %0"
+        :
+        : "m"(idtr));
 }
