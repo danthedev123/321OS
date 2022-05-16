@@ -2,7 +2,7 @@
 #include <kernel/drivers/serial/serial.h>
 
 
-void kernelLogSuccess(char* str)
+void kernelLogSuccess(const char* str)
 {
     // [ (GREEN) OK (RESET TO DEFAULT) ] 
     terminal_printstr("[ ");
@@ -21,7 +21,7 @@ void kernelLogSuccess(char* str)
 
 }
 
-void kernelLogFail(char* str)
+void kernelLogFail(const char* str)
 {
     terminal_printstr("[ ");
     terminal_printstr("\033[31;m");

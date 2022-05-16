@@ -30,7 +30,7 @@ void serial_putc(char c)
     outb(COM1_PORT, c);
 }
 
-void serial_writestring(char* str)
+void serial_writestring(const char* str)
 {
     for (size_t i = 0; str[i]; i++)
     {

@@ -3,7 +3,7 @@
 
 void bitmap_init(struct Bitmap* bitmap, void* buffer, size_t size)
 {
-    bitmap->buffer = buffer;
+    bitmap->buffer = (uint8_t*)buffer;
     bitmap->size = size;
 
     memset(bitmap->buffer, 0, size);

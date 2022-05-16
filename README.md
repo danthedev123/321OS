@@ -1,7 +1,7 @@
 <h1 align="center">321OS</h1>
 
 <p align="center">
-   A hobbyist operating system designed for x86_64 and written in C. In the future, it could be ported to other architectures such as IA-32 (32-bit x86). The goal is to eventually reach userspace and allow for drivers in both kernel mode and also user mode to support malicious or buggy drivers.
+   A hobbyist operating system designed for x86_64 and written in C++. In the future, it could be ported to other architectures such as IA-32 (32-bit x86). The goal is to eventually reach userspace and allow for drivers in both kernel mode and also user mode to support malicious or buggy drivers.
    <br />
    <a href="https://github.com/danthedev123/321OS/releases"><strong>⬇️ Releases »</strong></a>
    <br />

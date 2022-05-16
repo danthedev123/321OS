@@ -1,5 +1,5 @@
 #pragma once
 #include <stdint.h>
 
-char* hexToString(uint64_t value);
-char* itoa(int val, int base);
+const char* hexToString(uint64_t value);
+const char* itoa(int val, int base);

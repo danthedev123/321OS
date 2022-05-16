@@ -35,7 +35,7 @@ void terminal_putchar(char chr)
     }
 }
 
-void terminal_printstr(char* str)
+void terminal_printstr(const char* str)
 {
     for (size_t t = 0; str[t]; t++)
     {

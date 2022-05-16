@@ -36,6 +36,6 @@ __attribute__((aligned(0x1000)));
 
 extern struct GDT DefaultGDT;
 
-extern void LoadGDT(struct GDTDescriptor* gdtDescriptor);
+extern "C" void LoadGDT(struct GDTDescriptor* gdtDescriptor);
 
 void init_tss();

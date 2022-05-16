@@ -1,7 +1,7 @@
 #include <kernel/format.h>
 
 char output[128];
-char* hexToString(uint64_t value)
+const char* hexToString(uint64_t value)
 {
     uint64_t* valPtr = &value;
     uint8_t* ptr;
@@ -19,7 +19,7 @@ char* hexToString(uint64_t value)
     return output;
 }
 
-char* itoa(int val, int base){
+const char* itoa(int val, int base){
 
     static char buf[32] = {0};
 

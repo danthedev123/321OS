@@ -1,6 +1,6 @@
 #include <kernel/lib/string.h>
 
-size_t strlen(char* str)
+size_t strlen(const char* str)
 {
     size_t counter;
 
@@ -12,7 +12,7 @@ size_t strlen(char* str)
     return counter;
 }
 
-int strcmp(char* str1, char* str2)
+int strcmp(const char* str1, const char* str2)
 {
     if (strlen(str1) != strlen(str2)) return 1;
 

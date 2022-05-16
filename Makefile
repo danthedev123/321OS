@@ -6,7 +6,7 @@ kernel := build/kernel-$(arch).bin
 iso := build/321OS-$(arch).iso
 
 # Target compiler. User controllable.
-cc ?= x86_64-elf-gcc
+cxx ?= clang++
 
 INTERNALLDFLAGS :=  \
 	-Tsrc/arch/$(arch)/linker.ld \
@@ -15,7 +15,7 @@ INTERNALLDFLAGS :=  \
 	-static
 
 INTERNALCFLAGS :=     \
-	-std=gnu17                 \
+	-std=gnu++20               \
 	-ffreestanding             \
 	-fno-exceptions            \
 	-fno-stack-protector       \
@@ -29,20 +29,21 @@ INTERNALCFLAGS :=     \
 	-mno-sse2                  \
 	-mno-red-zone              \
 	-mcmodel=kernel			   \
-	-Werror
+	-Werror					   \
+	-target x86_64-pc-none-elf \
 	
 linker_script := src/arch/$(arch)/linker.ld
 asm_source_files = $(shell find src/arch/$(arch)/ -type f -name '*.asm')
 asm_object_files := $(patsubst src/arch/$(arch)/%.asm, \
 	build/arch/$(arch)/%_asm.o, $(asm_source_files))
 # Architecture specific C source files
-arch_c_source_files = $(shell find src/arch/$(arch)/ -type f -name '*.c')
-arch_c_object_files := $(patsubst src/arch/$(arch)/%.c, \
+arch_c_source_files = $(shell find src/arch/$(arch)/ -type f -name '*.cpp')
+arch_c_object_files := $(patsubst src/arch/$(arch)/%.cpp, \
 	build/arch/$(arch)/%.o, $(arch_c_source_files))
 
 # C source files
-kernel_c_source_files = $(shell find src/kernel/ -type f -name '*.c')
-kernel_c_object_files := $(patsubst src/kernel/%.c, \
+kernel_c_source_files = $(shell find src/kernel/ -type f -name '*.cpp')
+kernel_c_object_files := $(patsubst src/kernel/%.cpp, \
 	build/kernel/%.o, $(kernel_c_source_files))
 
 .PHONY: all clean run iso
@@ -54,7 +55,7 @@ clean:
 	@rm -r build
 
 run: $(iso)
-	@qemu-system-x86_64 -cdrom $(iso) -M q35 -m 500M -serial stdio -soundhw pcspk
+	@qemu-system-x86_64 -cdrom $(iso) -M q35 -m 500M -serial stdio -soundhw pcspk -d int -D kernel.log -no-shutdown -no-reboot -machine smm=off
 iso: $(iso)
 
 $(iso): $(kernel) limine
@@ -72,7 +73,7 @@ $(iso): $(kernel) limine
 	@rm -rf build/isofiles
 
 $(kernel): $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files) $(linker_script)
-	@x86_64-elf-ld -n -T $(linker_script) -o $(kernel) $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files)
+	@ld.lld $(INTERNALLDFLAGS) -o $(kernel) $(asm_object_files) $(arch_c_object_files) $(kernel_c_object_files)
 
 build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 	@printf "AS: $<\n"
@@ -80,15 +81,15 @@ build/arch/$(arch)/%_asm.o: src/arch/$(arch)/%.asm
 	@nasm -felf64 $< -o $@
 
 
-build/arch/$(arch)/%.o: src/arch/$(arch)/%.c
-	@printf "CC: $<\n"
+build/arch/$(arch)/%.o: src/arch/$(arch)/%.cpp
+	@printf "CXX: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@$(cc) -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
+	@$(cxx) -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
 
-build/kernel/%.o: src/kernel/%.c
-	@printf "CC: $<\n"
+build/kernel/%.o: src/kernel/%.cpp
+	@printf "CXX: $<\n"
 	@mkdir -p $(shell dirname $@)
-	@$(cc) -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
+	@$(cxx) -I src/include/ -c $(INTERNALCFLAGS) $< -o $@ -g
 
 limine:
 	git clone https://github.com/limine-bootloader/limine.git --branch=v2.0-branch-binary --depth=1

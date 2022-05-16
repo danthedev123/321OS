@@ -1,4 +1,4 @@
 #pragma once
 
-void kernelLogSuccess(char* str);
-void kernelLogFail(char* str);
+void kernelLogSuccess(const char* str);
+void kernelLogFail(const char* str);

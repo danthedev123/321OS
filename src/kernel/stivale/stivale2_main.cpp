@@ -62,7 +62,7 @@ void stivale_initialize_memorymap(struct stivale2_struct* stivale_struct, struct
             .address = (void*)stivale_mmap_entry->base,
             .num_pages = NEAREST_PAGE(stivale_mmap_entry->length),
             // If the memory type is not usable, return unusable
-            .type = MEM_TYPE_USABLE ? stivale_mmap_entry->type == STIVALE2_MMAP_USABLE : MEM_TYPE_UNUSABLE
+            .type = static_cast<EntryType>(MEM_TYPE_USABLE ? stivale_mmap_entry->type == STIVALE2_MMAP_USABLE : MEM_TYPE_UNUSABLE)
         };
 
     }
@@ -105,7 +105,7 @@ struct stivale_tags* GetTags()
 }
 
 void *stivale2_get_tag(struct stivale2_struct *stivale2_struct, uint64_t id) {
-    struct stivale2_tag *current_tag = (void *)stivale2_struct->tags;
+    struct stivale2_tag *current_tag = (struct stivale2_tag *)stivale2_struct->tags;
     for (;;) {
         // If the tag pointer is NULL (end of linked list), we did not find
         // the tag. Return NULL to signal this.
@@ -120,6 +120,6 @@ void *stivale2_get_tag(struct stivale2_struct *stivale2_struct, uint64_t id) {
         }
  
         // Get a pointer to the next tag in the linked list and repeat.
-        current_tag = (void *)current_tag->next;
+        current_tag = (struct stivale2_tag *)current_tag->next;
     }
 }

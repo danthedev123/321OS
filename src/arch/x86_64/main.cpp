@@ -13,22 +13,22 @@
 #include <kernel/lib/string.h>
 #include <kernel/drivers/sound/pcspeaker.h>
 
-void kernel_main(struct stivale2_struct *stivale2_struct)
+extern "C" void kernel_main(struct stivale2_struct *stivale2_struct)
 {
-    InitializeSerial();
+    //InitializeSerial();
 
-    serial_writestring("  ____ ___  __  ____   _____ ");
-    serial_writestring("\r\n");
-    serial_writestring(" |___ \\__ \\/_ |/ __ \\ / ____|");
-    serial_writestring("\r\n");
-    serial_writestring("   __) | ) || | |  | | (___  ");
-    serial_writestring("\r\n");
-    serial_writestring("  |__ < / / | | |  | |\\___ \\ ");
-    serial_writestring("\r\n");
-    serial_writestring("  ___) / /_ | | |__| |____) |");
-    serial_writestring("\r\n");
-    serial_writestring(" |____/____||_|\\____/|_____/ ");
-    serial_writestring("\r\n\r\n");
+    // serial_writestring("  ____ ___  __  ____   _____ ");
+    // serial_writestring("\r\n");
+    // serial_writestring(" |___ \\__ \\/_ |/ __ \\ / ____|");
+    // serial_writestring("\r\n");
+    // serial_writestring("   __) | ) || | |  | | (___  ");
+    // serial_writestring("\r\n");
+    // serial_writestring("  |__ < / / | | |  | |\\___ \\ ");
+    // serial_writestring("\r\n");
+    // serial_writestring("  ___) / /_ | | |__| |____) |");
+    // serial_writestring("\r\n");
+    // serial_writestring(" |____/____||_|\\____/|_____/ ");
+    // serial_writestring("\r\n\r\n");
 
     struct GDTDescriptor gdtDescriptor;
 
